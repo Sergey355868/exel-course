@@ -1,0 +1,24 @@
+{
+  "parser": "babel-eslint",
+  "env": {                  // для того чтобы обозначить где мы применяем наш код
+    "es6": true,
+    "browser": true,
+    "node": true        // ставим потому что работаем в webpack
+  },
+  "rules": {            // опи
+    "quotes": "off",
+    "linebreak-style": "off",
+    "max-len": "off",
+    "spaced-comment": "off",
+    "indent": "off",
+    "comma-dangle": "off",
+    "no-tabs": "off",
+    "no-multi-spaces": "off",
+    "key-spacing": "off",
+    "arrow-parens": "off",
+    "require-jsdoc": "off"
+  },
+  "extends": [
+    "eslint:recommended", "google"  // так как установили пакет eslint-config-google
+  ]
+}
