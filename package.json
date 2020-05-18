@@ -1,0 +1,24 @@
+{
+  "name": "exel-course",
+  "version": "1.0.0",
+  "description": "Pure JavaScript Exel Aplication",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sergey355868/exel-course.git"
+  },
+  "keywords": [
+    "js",
+    "javascript",
+    "exel"
+  ],
+  "author": "Sergey Barbolin <sera35@mail.ru>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sergey355868/exel-course/issues"
+  },
+  "homepage": "https://github.com/Sergey355868/exel-course#readme"
+}
