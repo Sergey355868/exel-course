@@ -3,6 +3,7 @@ const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const HtmlWebpackPlugin= require("html-webpack-plugin");
 const CopyPlugin= require("copy-webpack-plugin");
 const MiniCssExtractPlugin= require('mini-css-extract-plugin');
+const webpack = require('webpack');
 
 const isProd = process.env.NODE_ENV === "production";// true or false
 const isDev = !isProd; // true or false
@@ -35,8 +36,10 @@ module.exports = {
 	mode: "development",                     // по умолчанию если не указываем какие-то флаги webpack  в режиме разработки.
 	entry: ["@babel/polyfill", "./index.js"], // основной файл с которого все начинается. Это объект , но если входной файл один может быть и строкой.К этому файлу подтягиваются все остальные
 	output: {                               // обязательно объект
+		//publicPath: '/',
 		filename: filename("js"),        // Имя файла в котором будут находится все js файлы.Если продакшн мод файл bundle.js будет минифицированн(т.е когда запускаем npm run build).
-		path: path.resolve(__dirname, "dist") // (куда получим готовые файлы) все складывать будем в папку dist
+		path: path.resolve(__dirname, "dist"), // (куда получим готовые файлы) все складывать будем в папку dist
+		chunkFilename: '[id].js'
 	},
 	resolve: {
 		extensions: [".js"], // при импортах можно не добавлять
@@ -50,19 +53,38 @@ module.exports = {
 	},
 	devtool: isDev ? 'source-map' : false, // добавляем map в режиме разработки
 	devServer: {
+		contentBase: path.resolve(__dirname, 'src/index.html'),
+		//publicPath: '/',
 		port:4200,
+		watchOptions: {
+			poll: true
+		},
+		compress:true,
+		watchContentBase: true,
 		hot: isDev,
+		//historyApiFallback: true,
 	},
+	watch: true,
 	// добавляем плагины ( в массиве)
 	plugins: [
+		new webpack.DefinePlugin({
+			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+		}),
+		new webpack.HotModuleReplacementPlugin(),
 		new HtmlWebpackPlugin({
-			template: "index.html",
+			//filename: path.resolve(__dirname, 'dist/index.html?[hash]'),
+			template: 'index.html',
+			filename: 'index.html',
 			minify: {
 				removeComments:isProd,     // удаление коментариев в режиме прод, т.е. флаг true
 				collapseWhitespace:isProd, // удаление пробелов в режиме прод, т.е. флаг true
 			}
 		}),
-		new CleanWebpackPlugin(),
+		new CleanWebpackPlugin({
+			cleanOnceBeforeBuildPatterns: [
+				path.resolve(__dirname, 'dist')
+			]
+		}),
 		new CopyPlugin({
 			patterns: [
 				{
@@ -74,7 +96,8 @@ module.exports = {
 			]
 		}),
 		new MiniCssExtractPlugin({
-			filename: filename("css")
+			filename: filename("css"),
+			chunkFilename: '[id].css',
 		}),
 
 	],
@@ -101,7 +124,10 @@ module.exports = {
 				use: jsLoader()
 
 			},
-
+			// {
+			// 	test: /\.html$/i,
+			// 	use: ['file-loader?name=[name].[ext]', 'extract-loader', 'html-loader'],
+			// },
 		],
 	}
 };
